@@ -27,7 +27,7 @@ lessons = OrderedDict([('Elementary', [x for x in raw_lessons if x.grade == "K-4
 LOGGER = logging.getLogger()
 
 
-class PBSChef(SushiChef):
+class ArtsEdgeChef(SushiChef):
     channel_info = {
         'CHANNEL_SOURCE_DOMAIN': 'artsedge.kennedy-center.org/', # who is providing the content (e.g. learningequality.org)
         'CHANNEL_SOURCE_ID': 'artsedge',         # channel's unique id
@@ -113,12 +113,15 @@ def download_videos(jsonfile):
             if i == 4:
                 print ("Artificial quit")
                 break
-        
-def make_channel():
-    mychef = PBSChef()
-    # if you are having problems wth kolibri, delete your .ricecookerfilecache
-    args = {'token': os.environ['KOLIBRI_STUDIO_TOKEN'], 'reset': True, 'verbose': True}
-    options = {}
-    mychef.run(args, options)
 
-make_channel()
+
+if __name__ == '__main__':
+    """
+    Set the environment var `CONTENT_CURATION_TOKEN` (or `KOLIBRI_STUDIO_TOKEN`)
+    to your Kolibri Studio token, then call this script using:
+        python souschef.py  -v --reset
+    """
+    mychef = ArtsEdgeChef()
+    if 'KOLIBRI_STUDIO_TOKEN' in os.environ:
+        os.environ['CONTENT_CURATION_TOKEN'] = os.environ['KOLIBRI_STUDIO_TOKEN']
+    mychef.main()
